@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Features\Application.feature.cs">
+      <DependentUpon>Application.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Keyboard.feature.cs">
+      <DependentUpon>Keyboard.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Window.feature.cs">
+      <DependentUpon>Window.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpecBind.MsTest.Steps\SpecBind.MsTest.Steps.csproj" />
+    <ProjectReference Include="..\SpecBind.Selenium.Steps\SpecBind.Selenium.Steps.csproj" />
+    <ProjectReference Include="..\SpecBind.Selenium\SpecBind.Selenium.csproj" />
+    <ProjectReference Include="..\SpecBind\SpecBind.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\$(Configuration)\SpecBind.Selenium.SampleWin32App.exe">
+      <Link>SpecBind.Selenium.SampleWin32App.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver">
+      <Version>4.0.0.6-beta</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+    <PackageReference Include="SpecFlow" Version="3.5.14" />
+    <PackageReference Include="SpecFlow.MsTest" Version="3.5.14" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.5.14" />
+    <PackageReference Include="StyleCop.Analyzers">
+      <Version>1.0.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
