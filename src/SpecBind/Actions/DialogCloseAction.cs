@@ -5,7 +5,6 @@
 namespace SpecBind.Actions
 {
     using Pages;
-    using SpecBind.BrowserSupport;
     using SpecBind.Helpers;
 
     /// <summary>
@@ -13,26 +12,22 @@ namespace SpecBind.Actions
     /// </summary>
     public class DialogCloseAction : WaitForActionBase
     {
-        private readonly IBrowser browser;
         private readonly ILogger logger;
         private readonly IScenarioContextHelper contextHelper;
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogCloseAction" /> class.
         /// </summary>
-        /// <param name="browser">The browser.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="contextHelper">The context helper.</param>
         /// <param name="pageHistoryService">The page history service.</param>
         public DialogCloseAction(
-            IBrowser browser,
             ILogger logger,
             IScenarioContextHelper contextHelper,
-            PageHistoryService pageHistoryService)
+            IPageHistoryService pageHistoryService)
             : base(typeof(DialogCloseAction).Name, logger)
         {
-            this.browser = browser;
             this.logger = logger;
             this.contextHelper = contextHelper;
             this.pageHistoryService = pageHistoryService;

@@ -24,7 +24,7 @@ namespace SpecBind.ActionPipeline
     internal class ActionPipelineService : IActionPipelineService
     {
         private readonly IActionRepository actionRepository;
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         private bool actionRepositoryInitialized;
 
@@ -33,7 +33,7 @@ namespace SpecBind.ActionPipeline
         /// </summary>
         /// <param name="actionRepository">The action repository.</param>
         /// <param name="pageHistoryService">The page history service.</param>
-        public ActionPipelineService(IActionRepository actionRepository, PageHistoryService pageHistoryService)
+        public ActionPipelineService(IActionRepository actionRepository, IPageHistoryService pageHistoryService)
         {
             this.actionRepository = actionRepository;
             this.actionRepositoryInitialized = false;

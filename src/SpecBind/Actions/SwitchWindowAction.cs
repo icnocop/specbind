@@ -16,7 +16,7 @@ namespace SpecBind.Actions
         private readonly ILogger logger;
         private readonly IPageMapper pageMapper;
         private readonly IScenarioContextHelper contextHelper;
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SwitchWindowAction" /> class.
@@ -29,7 +29,7 @@ namespace SpecBind.Actions
             IPageMapper pageMapper,
             ILogger logger,
             IScenarioContextHelper contextHelper,
-            PageHistoryService pageHistoryService)
+            IPageHistoryService pageHistoryService)
             : base(typeof(SwitchWindowAction).Name, logger)
         {
             this.logger = logger;

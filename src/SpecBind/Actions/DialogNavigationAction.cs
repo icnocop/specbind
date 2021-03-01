@@ -5,7 +5,6 @@
 namespace SpecBind.Actions
 {
     using SpecBind.ActionPipeline;
-    using SpecBind.BrowserSupport;
     using SpecBind.Helpers;
 
     /// <summary>
@@ -14,25 +13,21 @@ namespace SpecBind.Actions
     public class DialogNavigationAction : WaitForDialogAction
     {
         private readonly ILogger logger;
-        private readonly IScenarioContextHelper contextHelper;
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogNavigationAction" /> class.
         /// </summary>
-        /// <param name="browser">The browser.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="contextHelper">The context helper.</param>
         /// <param name="pageHistoryService">The page history service.</param>
         public DialogNavigationAction(
-            IBrowser browser,
             ILogger logger,
             IScenarioContextHelper contextHelper,
-            PageHistoryService pageHistoryService)
-            : base(browser, logger, contextHelper, pageHistoryService)
+            IPageHistoryService pageHistoryService)
+            : base(logger, contextHelper, pageHistoryService)
         {
             this.logger = logger;
-            this.contextHelper = contextHelper;
             this.pageHistoryService = pageHistoryService;
         }
 

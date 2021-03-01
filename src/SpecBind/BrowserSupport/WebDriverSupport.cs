@@ -305,6 +305,7 @@ namespace SpecBind.BrowserSupport
             this.objectContainer.RegisterTypeAs<ProxyLogger, ILogger>();
             this.objectContainer.RegisterTypeAs<ScenarioContextHelper, IScenarioContextHelper>();
             this.objectContainer.RegisterTypeAs<TokenManager, ITokenManager>();
+            this.objectContainer.RegisterTypeAs<PageHistoryService, IPageHistoryService>();
         }
 
         /// <summary>
@@ -343,6 +344,10 @@ namespace SpecBind.BrowserSupport
             this.objectContainer.RegisterInstanceAs<IActionRepository>(actionRepository);
 
             var pageHistoryService = PageHistoryService.GetPageHistoryService(this.objectContainer);
+            if (pageHistoryService != null)
+            {
+                this.objectContainer.RegisterInstanceAs(pageHistoryService);
+            }
 
             var actionPipelineService = new ActionPipelineService(actionRepository, pageHistoryService);
             this.objectContainer.RegisterInstanceAs<IActionPipelineService>(actionPipelineService);

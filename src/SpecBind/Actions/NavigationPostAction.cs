@@ -15,13 +15,13 @@ namespace SpecBind.Actions
     /// </summary>
     public class NavigationPostAction : IPostAction
     {
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationPostAction" /> class.
         /// </summary>
         /// <param name="pageHistoryService">The page history service.</param>
-        public NavigationPostAction(PageHistoryService pageHistoryService)
+        public NavigationPostAction(IPageHistoryService pageHistoryService)
         {
             this.pageHistoryService = pageHistoryService;
         }

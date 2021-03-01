@@ -23,9 +23,9 @@ namespace SpecBind.Tests.Actions
         [TestMethod]
         public void TestGetActionName()
         {
-            var buttonClickAction = new DismissDialogAction(null);
+            var dismissDialogAction = new DismissDialogAction(null);
 
-            Assert.AreEqual("DismissDialogAction", buttonClickAction.Name);
+            Assert.AreEqual("DismissDialogAction", dismissDialogAction.Name);
         }
 
 
@@ -37,10 +37,10 @@ namespace SpecBind.Tests.Actions
         {
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
 
-            var buttonClickAction = new DismissDialogAction(browser.Object);
+            var dismissDialogAction = new DismissDialogAction(browser.Object);
 
             var context = new DismissDialogAction.DismissDialogContext("foo");
-            var result = buttonClickAction.Execute(context);
+            var result = dismissDialogAction.Execute(context);
 
             Assert.AreEqual(false, result.Success);
             Assert.IsNotNull(result.Exception);
@@ -58,10 +58,10 @@ namespace SpecBind.Tests.Actions
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
             browser.Setup(p => p.DismissAlert(AlertBoxAction.Ok, null));
 
-            var buttonClickAction = new DismissDialogAction(browser.Object);
+            var dismissDialogAction = new DismissDialogAction(browser.Object);
 
             var context = new DismissDialogAction.DismissDialogContext("ok");
-            var result = buttonClickAction.Execute(context);
+            var result = dismissDialogAction.Execute(context);
 
             Assert.AreEqual(true, result.Success);
 
@@ -77,10 +77,10 @@ namespace SpecBind.Tests.Actions
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
             browser.Setup(p => p.DismissAlert(AlertBoxAction.Ok, null));
 
-            var buttonClickAction = new DismissDialogAction(browser.Object);
+            var dismissDialogAction = new DismissDialogAction(browser.Object);
 
             var context = new DismissDialogAction.DismissDialogContext("  ok  ");
-            var result = buttonClickAction.Execute(context);
+            var result = dismissDialogAction.Execute(context);
 
             Assert.AreEqual(true, result.Success);
 
@@ -96,10 +96,10 @@ namespace SpecBind.Tests.Actions
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
             browser.Setup(p => p.DismissAlert(AlertBoxAction.Ok, string.Empty));
 
-            var buttonClickAction = new DismissDialogAction(browser.Object);
+            var dismissDialogAction = new DismissDialogAction(browser.Object);
 
             var context = new DismissDialogAction.DismissDialogContext("ok", null);
-            var result = buttonClickAction.Execute(context);
+            var result = dismissDialogAction.Execute(context);
 
             Assert.AreEqual(true, result.Success);
 
@@ -115,10 +115,10 @@ namespace SpecBind.Tests.Actions
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
             browser.Setup(p => p.DismissAlert(AlertBoxAction.Ok, "Some Text"));
 
-            var buttonClickAction = new DismissDialogAction(browser.Object);
+            var dismissDialogAction = new DismissDialogAction(browser.Object);
 
             var context = new DismissDialogAction.DismissDialogContext("ok", "Some Text");
-            var result = buttonClickAction.Execute(context);
+            var result = dismissDialogAction.Execute(context);
 
             Assert.AreEqual(true, result.Success);
 

@@ -22,7 +22,7 @@ namespace SpecBind.Selenium.IntegrationTests.Steps
         /// </summary>
         /// <param name="tokenManager">The token manager.</param>
         /// <param name="pageHistoryService">The page history service.</param>
-        public TestPostNavigateHook(ITokenManager tokenManager, PageHistoryService pageHistoryService)
+        public TestPostNavigateHook(ITokenManager tokenManager, IPageHistoryService pageHistoryService)
             : base(pageHistoryService)
         {
             this.tokenManager = tokenManager;

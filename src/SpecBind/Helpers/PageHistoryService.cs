@@ -14,7 +14,7 @@ namespace SpecBind.Helpers
     /// <summary>
     /// Page History Service.
     /// </summary>
-    public class PageHistoryService
+    public class PageHistoryService : IPageHistoryService
     {
         private readonly ILogger logger;
 
@@ -32,7 +32,7 @@ namespace SpecBind.Helpers
         /// Gets or sets the page history.
         /// </summary>
         /// <value>The page history.</value>
-        internal Dictionary<Type, IPage> PageHistory { get; set; }
+        public Dictionary<Type, IPage> PageHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IPage"/> with the specified page type.
@@ -95,35 +95,11 @@ namespace SpecBind.Helpers
         }
 
         /// <summary>
-        /// Gets the page history service.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <returns>The page history service.</returns>
-        internal static PageHistoryService GetPageHistoryService(IObjectContainer container)
-        {
-            var configSection = SettingHelper.GetConfigurationSection();
-            if (configSection == null || configSection.PageHistoryService == null || string.IsNullOrWhiteSpace(configSection.PageHistoryService.Provider))
-            {
-                return null;
-            }
-
-            var type = Type.GetType(configSection.PageHistoryService.Provider, AssemblyLoader.OnAssemblyCheck, AssemblyLoader.OnGetType);
-            if (type == null || !typeof(PageHistoryService).IsAssignableFrom(type))
-            {
-                throw new InvalidOperationException(string.Format("Could not load type: {0}. Make sure this is fully qualified and the assembly exists. Also ensure the base type is PageHistoryService", configSection.PageHistoryService.Provider));
-            }
-
-            var pageHistoryService = (PageHistoryService)container.Resolve(type);
-
-            return pageHistoryService;
-        }
-
-        /// <summary>
         /// Finds the page containing the specified property name.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The page.</returns>
-        internal IPage FindPageContainingProperty(string propertyName)
+        public IPage FindPageContainingProperty(string propertyName)
         {
             return this.FindPageContainingProperty(propertyName, false, false, false);
         }
@@ -133,9 +109,33 @@ namespace SpecBind.Helpers
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The page.</returns>
-        internal IPage FindPage(string propertyName)
+        public IPage FindPage(string propertyName)
         {
             return this.FindPageContainingProperty(propertyName, true, true, true);
+        }
+
+        /// <summary>
+        /// Gets the page history service.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <returns>The page history service.</returns>
+        internal static IPageHistoryService GetPageHistoryService(IObjectContainer container)
+        {
+            var configSection = SettingHelper.GetConfigurationSection();
+            if (configSection == null || configSection.PageHistoryService == null || string.IsNullOrWhiteSpace(configSection.PageHistoryService.Provider))
+            {
+                return null;
+            }
+
+            var type = Type.GetType(configSection.PageHistoryService.Provider, AssemblyLoader.OnAssemblyCheck, AssemblyLoader.OnGetType);
+            if (type == null || !typeof(IPageHistoryService).IsAssignableFrom(type))
+            {
+                throw new InvalidOperationException(string.Format("Could not load type: {0}. Make sure this is fully qualified and the assembly exists. Also ensure the base type is PageHistoryService", configSection.PageHistoryService.Provider));
+            }
+
+            var pageHistoryService = (IPageHistoryService)container.Resolve(type);
+
+            return pageHistoryService;
         }
 
         private IPage FindPageContainingProperty(

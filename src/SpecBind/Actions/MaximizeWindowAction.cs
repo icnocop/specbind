@@ -6,26 +6,18 @@ namespace SpecBind.Actions
 {
     using SpecBind.ActionPipeline;
     using SpecBind.BrowserSupport;
-    using SpecBind.Pages;
 
     /// <summary>
     /// Maximize Window Action
     /// </summary>
     public class MaximizeWindowAction : ActionBase
     {
-        private readonly ILogger logger;
-        private readonly IPageMapper pageMapper;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MaximizeWindowAction" /> class.
         /// </summary>
-        /// <param name="pageMapper">The page mapper.</param>
-        /// <param name="logger">The logger.</param>
-        public MaximizeWindowAction(IPageMapper pageMapper, ILogger logger)
+        public MaximizeWindowAction()
             : base(typeof(MaximizeWindowAction).Name)
         {
-            this.pageMapper = pageMapper;
-            this.logger = logger;
         }
 
         /// <summary>

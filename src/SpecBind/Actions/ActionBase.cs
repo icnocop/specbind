@@ -12,8 +12,6 @@ namespace SpecBind.Actions
     /// </summary>
     public abstract class ActionBase : IAction
     {
-        private readonly string actionName;
-
         /// <summary>
         /// Initializes the ActionBase type.
         /// </summary>
@@ -28,7 +26,7 @@ namespace SpecBind.Actions
         /// <param name="actionName">Name of the action.</param>
         protected ActionBase(string actionName)
         {
-            this.actionName = actionName;
+            this.Name = actionName;
         }
 
         /// <summary>
@@ -48,10 +46,7 @@ namespace SpecBind.Actions
         /// Gets the action name.
         /// </summary>
         /// <value>The action name.</value>
-        public string Name
-        {
-            get { return this.actionName; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets or sets the element locator.

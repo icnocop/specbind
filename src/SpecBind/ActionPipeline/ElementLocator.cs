@@ -17,7 +17,7 @@ namespace SpecBind.ActionPipeline
     {
         private readonly List<ILocatorAction> filterActions;
         private readonly IPage page;
-        private readonly PageHistoryService pageHistoryService;
+        private readonly IPageHistoryService pageHistoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementLocator" /> class.
@@ -25,7 +25,7 @@ namespace SpecBind.ActionPipeline
         /// <param name="page">The page.</param>
         /// <param name="pageHistoryService">The page history service.</param>
         /// <param name="filterActions">The filter actions.</param>
-        public ElementLocator(IPage page, PageHistoryService pageHistoryService, IEnumerable<ILocatorAction> filterActions)
+        public ElementLocator(IPage page, IPageHistoryService pageHistoryService, IEnumerable<ILocatorAction> filterActions)
         {
             this.page = page;
             this.pageHistoryService = pageHistoryService;

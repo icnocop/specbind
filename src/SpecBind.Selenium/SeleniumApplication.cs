@@ -243,7 +243,7 @@ namespace SpecBind.Selenium
         /// <returns>The created page object.</returns>
         protected override IPage CreateNativePage(Type pageType, bool verifyPageValidity)
         {
-            PageHistoryService pageHistoryService = this.scenarioContext?.ScenarioContainer.Resolve<PageHistoryService>();
+            IPageHistoryService pageHistoryService = this.scenarioContext?.ScenarioContainer.Resolve<IPageHistoryService>();
             if ((pageHistoryService != null) && pageHistoryService.Contains(pageType))
             {
                 return pageHistoryService[pageType];
