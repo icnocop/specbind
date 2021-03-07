@@ -191,7 +191,7 @@ namespace SpecBind.Tests
             var logger = new Mock<ILogger>(MockBehavior.Loose);
             var browser = new Mock<BrowserBase>(MockBehavior.Strict, logger.Object);
             browser.Setup(b => b.Close());
-            browser.Protected().Setup("DisposeWindow", disposingManagedResources);
+            browser.Protected().Setup("DisposeWindow", ItExpr.Is<bool>((x) => disposingManagedResources));
 
             var browserInstance = browser.Object;
             browserInstance.Close(dispose: true);
@@ -199,7 +199,7 @@ namespace SpecBind.Tests
             Assert.IsTrue(browserInstance.IsDisposed);
 
             browser.Verify(b => b.Close());
-            browser.Protected().Verify("DisposeWindow", Times.Once(), disposingManagedResources);
+            browser.Protected().Verify("DisposeWindow", Times.Once(), ItExpr.Is<bool>((x) => disposingManagedResources));
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace SpecBind.Tests
             var logger = new Mock<ILogger>(MockBehavior.Loose);
             var browser = new Mock<BrowserBase>(MockBehavior.Strict, logger.Object);
             browser.Setup(b => b.Close());
-            browser.Protected().Setup("DisposeWindow", disposingManagedResources);
+            browser.Protected().Setup("DisposeWindow", ItExpr.Is<bool>((x) => disposingManagedResources));
 
             var browserInstance = browser.Object;
             browserInstance.Close(dispose: false);
@@ -221,7 +221,7 @@ namespace SpecBind.Tests
             Assert.IsFalse(browserInstance.IsDisposed);
 
             browser.Verify(b => b.Close());
-            browser.Protected().Verify("DisposeWindow", Times.Never(), disposingManagedResources);
+            browser.Protected().Verify("DisposeWindow", Times.Never(), ItExpr.Is<bool>((x) => disposingManagedResources));
         }
 
 
