@@ -11,6 +11,7 @@ namespace SpecBind.Tests.PropertyHandlers
     using Moq;
 
     using SpecBind.Actions;
+    using SpecBind.BrowserSupport;
     using SpecBind.Pages;
     using SpecBind.PropertyHandlers;
     using SpecBind.Tests.Support;
@@ -90,6 +91,107 @@ namespace SpecBind.Tests.PropertyHandlers
             Assert.IsNotNull(actualValue);
 
             pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that calling GetCurrentValue with script runs executes the script on the browser.
+        /// </summary>
+        [TestMethod]
+        public void GetCurrentValue_WithScript_CallsExecuteScriptOnBrowser()
+        {
+            var browser = new Mock<IBrowser>();
+            browser.Setup(x => x.ExecuteScript("return \"hello world\";")).Returns("hello world");
+            WebDriverSupport.CurrentBrowser = browser.Object;
+
+            var element = new BaseElement();
+            var propData = new Mock<IPropertyData>();
+            var page = new Mock<IPage>(MockBehavior.Strict);
+
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+
+            var propertyData = new VirtualPropertyData<BaseElement>(
+                pageBase.Object,
+                "MyProperty",
+                (p, f) =>
+                {
+                    Assert.AreSame(p, pageBase.Object);
+                    return f(element);
+                },
+                null,
+                "return \"hello world\";");
+
+            var result = propertyData.GetCurrentValue();
+
+            Assert.AreEqual("hello world", result);
+
+            pageBase.VerifyAll();
+            page.VerifyAll();
+            propData.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that calling GetCurrentValue with script runs executes the script on the browser.
+        /// </summary>
+        [TestMethod]
+        public void FillData_WithAttribute_SetsTheAttributeValue()
+        {
+            var element = new BaseElement();
+            var propData = new Mock<IPropertyData>();
+            var page = new Mock<IPage>(MockBehavior.Strict);
+
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.SetElementAttributeValue(element, "myAttributeName", "my data"));
+
+            var propertyData = new VirtualPropertyData<BaseElement>(
+                pageBase.Object,
+                "MyProperty",
+                (p, f) =>
+                {
+                    Assert.AreSame(p, pageBase.Object);
+                    return f(element);
+                },
+                "myAttributeName",
+                "my data");
+
+            propertyData.FillData("my data");
+
+            pageBase.VerifyAll();
+            page.VerifyAll();
+            propData.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that calling FillData with a script runs executes the script on the browser.
+        /// </summary>
+        [TestMethod]
+        public void FillData_WithScript_CallsExecuteScriptOnBrowser()
+        {
+            var browser = new Mock<IBrowser>();
+            browser.Setup(x => x.ExecuteScript("myFunction();", "my data")).Returns("some result");
+            WebDriverSupport.CurrentBrowser = browser.Object;
+
+            var element = new BaseElement();
+            var propData = new Mock<IPropertyData>();
+            var page = new Mock<IPage>(MockBehavior.Strict);
+
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+
+            var propertyData = new VirtualPropertyData<BaseElement>(
+                pageBase.Object,
+                "MyProperty",
+                (p, f) =>
+                {
+                    Assert.AreSame(p, pageBase.Object);
+                    return f(element);
+                },
+                null,
+                "myFunction();");
+
+            propertyData.FillData("my data");
+
+            pageBase.VerifyAll();
+            page.VerifyAll();
+            propData.VerifyAll();
         }
 
         /// <summary>

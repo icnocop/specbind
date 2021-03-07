@@ -878,5 +878,83 @@ namespace SpecBind.Tests
             scenarioContext.VerifyAll();
             pipelineService.VerifyAll();
         }
+
+        /// <summary>
+        /// Tests that entering text performs the appropriate keyboard action.
+        /// </summary>
+        [TestMethod]
+        public void TestGivenIEntered()
+        {
+            var testPage = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<KeyboardAction>(
+                testPage.Object,
+                It.Is<KeyboardAction.KeyboardActionContext>(
+                    c => c.KeyboardSendType == KeyboardAction.KeyboardSendType.Default && c.Data == "mytext")))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.GetCurrentPage()).Returns(testPage.Object);
+
+            var steps = new DataSteps(scenarioContext.Object, pipelineService.Object, this.logger.Object);
+
+            steps.GivenIEntered("mytext");
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+        }
+
+        /// <summary>
+        /// Tests that pressing keys performs the appropriate keyboard action.
+        /// </summary>
+        [TestMethod]
+        public void TestGivenIPressed()
+        {
+            var testPage = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<KeyboardAction>(
+                testPage.Object,
+                It.Is<KeyboardAction.KeyboardActionContext>(
+                    c => c.KeyboardSendType == KeyboardAction.KeyboardSendType.Press && c.Data == "mytext")))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.GetCurrentPage()).Returns(testPage.Object);
+
+            var steps = new DataSteps(scenarioContext.Object, pipelineService.Object, this.logger.Object);
+
+            steps.GivenIPressed("mytext");
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+        }
+
+        /// <summary>
+        /// Tests that releasing keys performs the appropriate keyboard action.
+        /// </summary>
+        [TestMethod]
+        public void TestGivenIReleased()
+        {
+            var testPage = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<KeyboardAction>(
+                testPage.Object,
+                It.Is<KeyboardAction.KeyboardActionContext>(
+                    c => c.KeyboardSendType == KeyboardAction.KeyboardSendType.Release && c.Data == "mytext")))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.GetCurrentPage()).Returns(testPage.Object);
+
+            var steps = new DataSteps(scenarioContext.Object, pipelineService.Object, this.logger.Object);
+
+            steps.GivenIReleased("mytext");
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+        }
     }
 }

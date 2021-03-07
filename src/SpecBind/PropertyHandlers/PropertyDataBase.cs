@@ -199,16 +199,6 @@ namespace SpecBind.PropertyHandlers
         }
 
         /// <summary>
-        /// Gets the item as context in page.
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <returns>The item as context in page.</returns>
-        public virtual IPage GetItemAsContextInPage(IPage parent)
-        {
-            throw this.CreateNotSupportedException("Getting a property as context in page");
-        }
-
-        /// <summary>
         /// Validates the list.
         /// </summary>
         /// <param name="validations">The validations.</param>

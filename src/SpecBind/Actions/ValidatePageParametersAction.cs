@@ -71,7 +71,7 @@ namespace SpecBind.Actions
                 {
                     if (!actualParameters.ContainsKey(key))
                     {
-                        return ActionResult.Failure(new Exception($"Parameter key '{key}' was not found in query string '{queryString.ToString()}'."));
+                        return ActionResult.Failure(new Exception($"Parameter key '{key}' was not found in query string '{queryString}'."));
                     }
 
                     if (expectedParameters[key] != actualParameters[key])
@@ -90,7 +90,7 @@ namespace SpecBind.Actions
                 {
                     if (actualParameters.ContainsKey(key))
                     {
-                        return ActionResult.Failure(new Exception($"Parameter key '{key}' was found in query string '{queryString.ToString()}'."));
+                        return ActionResult.Failure(new Exception($"Parameter key '{key}' was found in query string '{queryString}'."));
                     }
                 }
             }

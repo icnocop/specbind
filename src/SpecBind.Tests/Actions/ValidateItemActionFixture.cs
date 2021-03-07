@@ -28,9 +28,9 @@ namespace SpecBind.Tests.Actions
         [TestMethod]
         public void TestGetActionName()
         {
-            var buttonClickAction = new ValidateItemAction();
+            var validateItemAction = new ValidateItemAction();
 
-            Assert.AreEqual("ValidateItemAction", buttonClickAction.Name);
+            Assert.AreEqual("ValidateItemAction", validateItemAction.Name);
         }
 
         /// <summary>

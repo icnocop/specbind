@@ -5,7 +5,8 @@
 namespace SpecBind.Tests
 {
     using System;
-
+    using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Moq;
@@ -15,7 +16,7 @@ namespace SpecBind.Tests
     using SpecBind.BrowserSupport;
     using SpecBind.Helpers;
     using SpecBind.Pages;
-
+    using SpecBind.Tests.Extensions;
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -132,11 +133,8 @@ namespace SpecBind.Tests
                 page.Object, It.Is<WaitForActionBase.WaitForActionBaseContext>(a => a.PropertyName == "myproperty")))
                            .Returns(ActionResult.Successful(listItem.Object));
 
-
             var browser = new Mock<IBrowser>(MockBehavior.Strict);
 
-
-            var pageMapper = new Mock<IPageMapper>(MockBehavior.Strict);
             var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
             scenarioContext.Setup(s => s.GetCurrentPage()).Returns(page.Object);
             scenarioContext.Setup(s => s.SetCurrentPage(listItem.Object));
@@ -148,7 +146,6 @@ namespace SpecBind.Tests
             steps.GivenEnsureOnDialogStep("my property");
 
             browser.VerifyAll();
-            pageMapper.VerifyAll();
             scenarioContext.VerifyAll();
 
         }
@@ -277,6 +274,208 @@ namespace SpecBind.Tests
             pageMapper.VerifyAll();
             scenarioContext.VerifyAll();
             testPage.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to GivenIWasOnTheContext sets the page context as the current page.
+        /// </summary>
+        [TestMethod]
+        public void GivenIWasOnTheContext_SetsPageContextAsCurrentPage()
+        {
+            var testPage = new Mock<IPage>();
+            var testPageContext = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<GetElementAsContextInPageAction>(
+                testPage.Object,
+                It.Is<GetElementAsContextInPageAction.GetElementAsContextInPageActionContext>(c => c.PropertyName == "myproperty")))
+                .Returns(ActionResult.Successful(testPageContext.Object));
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.GetCurrentPage()).Returns(testPage.Object);
+            scenarioContext.Setup(s => s.SetCurrentPage(testPageContext.Object));
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.GivenIWasOnTheContext("myproperty");
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+            testPageContext.VerifyAll();
+            testPage.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to GivenIWasOnTheSection sets the page section as the current page.
+        /// </summary>
+        [TestMethod]
+        public void GivenIWasOnTheSection_SetsPageSectionAsCurrentPage()
+        {
+            var testPage = new Mock<IPage>();
+            var testPageContext = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<GetElementAsPageAction>(
+                testPage.Object,
+                It.Is<ActionContext>(c => c.PropertyName == "myproperty")))
+                .Returns(ActionResult.Successful(testPageContext.Object));
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.GetCurrentPage()).Returns(testPage.Object);
+            scenarioContext.Setup(s => s.SetCurrentPage(testPageContext.Object));
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.GivenIWasOnTheSection("myproperty");
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+            testPageContext.VerifyAll();
+            testPage.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to GivenNavigatedBackStep calls the PageNavigationAction with a context containing the NavigateBack page action.
+        /// </summary>
+        [TestMethod]
+        public void GivenINavigatedBack_NavigatesBack()
+        {
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<PageNavigationAction>(
+                null,
+                It.Is<PageNavigationAction.PageNavigationActionContext>(c => c.PageAction == PageNavigationAction.PageAction.NavigateBack)))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.GivenNavigatedBackStep();
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to MaximizeWindowStep calls MaximizeWindowAction.
+        /// </summary>
+        [TestMethod]
+        public void MaximizeWindowStep_MaximizesTheWindow()
+        {
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<MaximizeWindowAction>(null, null))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.MaximizeWindowStep();
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to MaximizeWindowStep calls MaximizeWindowAction.
+        /// </summary>
+        [TestMethod]
+        public void ThenTheQueryStringDoesntHaveTheFollowingParameters_CallsValidatePageParametersAction()
+        {
+            var testPage = new Mock<IPage>();
+
+            var table = new Table("Name");
+            table.AddRow("queryStringKey");
+
+            Dictionary<string, string> pageParameters = table.Rows.ToDictionary(r => r[0], r => (string)null);
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<ValidatePageParametersAction>(
+                null,
+                It.Is<ValidatePageParametersAction.ValidatePageParametersActionContext>(c =>
+                    c.PageParameterValidationAction == ValidatePageParametersAction.PageParameterValidationAction.DoesNotContain
+                    && c.PageParameters.ContentEquals(pageParameters))))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.ThenTheQueryStringDoesntHaveTheFollowingParameters(table);
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to MaximizeWindowStep calls MaximizeWindowAction.
+        /// </summary>
+        [TestMethod]
+        public void ThenTheQueryStringHasTheFollowingParameters_CallsValidatePageParametersAction()
+        {
+            var testPage = new Mock<IPage>();
+
+            var table = new Table("Name", "Key");
+            table.AddRow("queryStringKey", "queryStringValue");
+
+            Dictionary<string, string> pageParameters = table.Rows.ToDictionary(r => r[0], r => r[1]);
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<ValidatePageParametersAction>(
+                null,
+                It.Is<ValidatePageParametersAction.ValidatePageParametersActionContext>(c =>
+                    c.PageParameterValidationAction == ValidatePageParametersAction.PageParameterValidationAction.Contains
+                    && c.PageParameters.ContentEquals(pageParameters))))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.ThenTheQueryStringHasTheFollowingParameters(table);
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to WhenISwitchToThePage calls SwitchWindowAction.
+        /// </summary>
+        [TestMethod]
+        public void WhenISwitchedToThePage_CallsSwitchWindowAction()
+        {
+            var testPage = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(p => p.PerformAction<SwitchWindowAction>(
+                null,
+                It.Is<ActionContext>(c =>
+                    c.PropertyName == "mypage")))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(s => s.SetCurrentPage(null));
+
+            var tokenManager = new Mock<ITokenManager>(MockBehavior.Strict);
+
+            var steps = new PageNavigationSteps(scenarioContext.Object, pipelineService.Object, tokenManager.Object, this.logger.Object);
+
+            steps.WhenISwitchedToThePage("mypage");
+
+            pipelineService.VerifyAll();
+            scenarioContext.VerifyAll();
         }
     }
 }

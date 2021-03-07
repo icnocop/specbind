@@ -255,25 +255,6 @@ namespace SpecBind.PropertyHandlers
         }
 
         /// <summary>
-        /// Gets the item as context in page.
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <returns>The item as context in page.</returns>
-        public override IPage GetItemAsContextInPage(IPage parent)
-        {
-            var item = default(TElement);
-            var findItem = new Func<TElement, bool>(
-                prop =>
-                    {
-                        item = prop;
-                        return true;
-                    });
-
-            this.elementAction(this.ElementHandler, findItem);
-            return this.ElementHandler.GetPageFromElement(item);
-        }
-
-        /// <summary>
         /// Highlights this instance.
         /// </summary>
         public override void Highlight()

@@ -26,9 +26,9 @@ namespace SpecBind.Tests.Actions
         [TestMethod]
         public void TestGetActionName()
         {
-            var buttonClickAction = new WaitForListItemsAction(null);
+            var waitForListItemsAction = new WaitForListItemsAction(null);
 
-            Assert.AreEqual("WaitForListItemsAction", buttonClickAction.Name);
+            Assert.AreEqual("WaitForListItemsAction", waitForListItemsAction.Name);
         }
 
         /// <summary>

@@ -372,6 +372,179 @@ namespace SpecBind.Tests.PropertyHandlers
         }
 
         /// <summary>
+        /// Verifies a call to MouseOverElement calls PageElementHandler.MouseOverElement.
+        /// </summary>
+        [TestMethod]
+        public void MouseOverElement()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.MouseOverElement(element)).Returns(true);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            propertyData.MouseOverElement();
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a failed call to MouseOverElement throws an ElementExecutionException.
+        /// </summary>
+        [TestMethod]
+        public void MouseOverElement_WhenFailed_ThrowsElementExecutionException()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.MouseOverElement(element)).Returns(false);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            try
+            {
+                propertyData.MouseOverElement();
+
+                Assert.Fail("Expected ElementExecuteException");
+            }
+            catch (ElementExecuteException ex)
+            {
+                Assert.AreEqual("Mouse Over Action for property 'MyProperty' failed!", ex.Message);
+            }
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to DoubleClickElement calls PageElementHandler.DoubleClickElement.
+        /// </summary>
+        [TestMethod]
+        public void DoubleClickElement()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.DoubleClickElement(element)).Returns(true);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            propertyData.DoubleClickElement();
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a failed call to DoubleClickElement throws an ElementExecutionException.
+        /// </summary>
+        [TestMethod]
+        public void DoubleClickElement_WhenFailed_ThrowsElementExecutionException()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.DoubleClickElement(element)).Returns(false);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            try
+            {
+                propertyData.DoubleClickElement();
+
+                Assert.Fail("Expected ElementExecuteException");
+            }
+            catch (ElementExecuteException ex)
+            {
+                Assert.AreEqual("Double-click action for property 'MyProperty' failed!", ex.Message);
+            }
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to RightClickElement calls PageElementHandler.RightClickElement.
+        /// </summary>
+        [TestMethod]
+        public void RightClickElement()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.RightClickElement(element)).Returns(true);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            propertyData.RightClickElement();
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a failed call to RightClickElement throws an ElementExecutionException.
+        /// </summary>
+        [TestMethod]
+        public void RightClickElement_WhenFailed_ThrowsElementExecutionException()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.RightClickElement(element)).Returns(false);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            try
+            {
+                propertyData.RightClickElement();
+
+                Assert.Fail("Expected ElementExecuteException");
+            }
+            catch (ElementExecuteException ex)
+            {
+                Assert.AreEqual("Right-click action for property 'MyProperty' failed!", ex.Message);
+            }
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to ClearCache calls PageElementHandler.ClearCache.
+        /// </summary>
+        [TestMethod]
+        public void ClearCache()
+        {
+            var element = new BaseElement();
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.ClearCache(element));
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            propertyData.ClearCache();
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to ClearData calls PageElementHandler.GetClearMethod.
+        /// </summary>
+        [TestMethod]
+        public void ClearData()
+        {
+            var element = new BaseElement();
+
+            Action<BaseElement> clearMethod = new Action<BaseElement>((e) => { });
+
+            var pageBase = new Mock<IPageElementHandler<BaseElement>>(MockBehavior.Strict);
+            pageBase.Setup(p => p.WaitForElement(element, WaitConditions.BecomesExistent, null)).Returns(true);
+            pageBase.Setup(p => p.GetClearMethod(typeof(BaseElement))).Returns(clearMethod);
+
+            var propertyData = CreatePropertyData(pageBase, element);
+
+            propertyData.ClearData();
+
+            pageBase.VerifyAll();
+        }
+
+        /// <summary>
         /// Creates the property data.
         /// </summary>
         /// <typeparam name="TElement">The type of the element.</typeparam>

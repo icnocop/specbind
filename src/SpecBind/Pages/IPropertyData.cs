@@ -130,13 +130,6 @@ namespace SpecBind.Pages
         IPage GetItemAsPage();
 
         /// <summary>
-        /// Gets the item as context in page.
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <returns>The item as context in page.</returns>
-        IPage GetItemAsContextInPage(IPage parent);
-
-        /// <summary>
         /// Highlights this instance.
         /// </summary>
         void Highlight();

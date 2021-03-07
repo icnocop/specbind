@@ -4,7 +4,6 @@
 
 namespace SpecBind.Tests
 {
-    using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using SpecBind.ActionPipeline;

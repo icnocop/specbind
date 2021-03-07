@@ -13,7 +13,7 @@ namespace SpecBind.Tests.Actions
     using SpecBind.Pages;
 
     /// <summary>
-    /// A test fixture for a button click action
+    /// A test fixture for a get element as page action action
     /// </summary>
     [TestClass]
     public class GetElementAsPageActionFixture
@@ -24,9 +24,9 @@ namespace SpecBind.Tests.Actions
         [TestMethod]
         public void TestGetActionName()
         {
-            var buttonClickAction = new GetElementAsPageAction();
+            var getElementAsPageAction = new GetElementAsPageAction();
 
-            Assert.AreEqual("GetElementAsPageAction", buttonClickAction.Name);
+            Assert.AreEqual("GetElementAsPageAction", getElementAsPageAction.Name);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SpecBind.Tests.Actions
             var locator = new Mock<IElementLocator>(MockBehavior.Strict);
             locator.Setup(p => p.GetElement("doesnotexist")).Throws(new ElementExecuteException("Cannot find item"));
 
-            var buttonClickAction = new GetElementAsPageAction
+            var getElementAsPageAction = new GetElementAsPageAction
             {
                 ElementLocator = locator.Object
             };
@@ -47,7 +47,7 @@ namespace SpecBind.Tests.Actions
             var context = new ActionContext("doesnotexist");
 
             ExceptionHelper.SetupForException<ElementExecuteException>(
-                () => buttonClickAction.Execute(context), e => locator.VerifyAll());
+                () => getElementAsPageAction.Execute(context), e => locator.VerifyAll());
         }
 
         /// <summary>
@@ -63,13 +63,13 @@ namespace SpecBind.Tests.Actions
             var locator = new Mock<IElementLocator>(MockBehavior.Strict);
             locator.Setup(p => p.GetElement("myproperty")).Returns(propData.Object);
 
-            var buttonClickAction = new GetElementAsPageAction
+            var getElementAsPageAction = new GetElementAsPageAction
             {
                 ElementLocator = locator.Object
             };
 
             var context = new ActionContext("myproperty");
-            var result = buttonClickAction.Execute(context);
+            var result = getElementAsPageAction.Execute(context);
 
             Assert.AreEqual(false, result.Success);
 
@@ -94,13 +94,13 @@ namespace SpecBind.Tests.Actions
             var locator = new Mock<IElementLocator>(MockBehavior.Strict);
             locator.Setup(p => p.GetElement("myproperty")).Returns(propData.Object);
 
-            var buttonClickAction = new GetElementAsPageAction
+            var getElementAsPageAction = new GetElementAsPageAction
             {
                 ElementLocator = locator.Object
             };
 
             var context = new ActionContext("myproperty");
-            var result = buttonClickAction.Execute(context);
+            var result = getElementAsPageAction.Execute(context);
 
             Assert.AreEqual(false, result.Success);
 
@@ -126,13 +126,13 @@ namespace SpecBind.Tests.Actions
             var locator = new Mock<IElementLocator>(MockBehavior.Strict);
             locator.Setup(p => p.GetElement("myproperty")).Returns(propData.Object);
 
-            var buttonClickAction = new GetElementAsPageAction
+            var getElementAsPageAction = new GetElementAsPageAction
             {
                 ElementLocator = locator.Object
             };
 
             var context = new ActionContext("myproperty");
-            var result = buttonClickAction.Execute(context);
+            var result = getElementAsPageAction.Execute(context);
 
             Assert.AreEqual(true, result.Success);
             Assert.AreSame(page.Object, result.Result);

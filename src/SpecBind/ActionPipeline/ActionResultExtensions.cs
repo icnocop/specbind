@@ -4,7 +4,6 @@
 
 namespace SpecBind.ActionPipeline
 {
-    using System;
     using System.Runtime.ExceptionServices;
 
     /// <summary>

@@ -3,6 +3,7 @@
 // </copyright>
 namespace SpecBind.Tests
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,6 +14,8 @@ namespace SpecBind.Tests
     using SpecBind.Actions;
     using SpecBind.Helpers;
     using SpecBind.Pages;
+    using TechTalk.SpecFlow;
+    using static SpecBind.TokenSteps;
 
     /// <summary>
     /// A test fixture for the token steps class.
@@ -73,6 +76,44 @@ namespace SpecBind.Tests
 
             scenarioContext.VerifyAll();
             pipelineService.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that calling SetTheFollowingTokens calls TokenManager.SetToken.
+        /// </summary>
+        [TestMethod]
+        public void SetTheFollowingTokens()
+        {
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            Mock<ITokenManager> tokenManager = new Mock<ITokenManager>();
+            tokenManager.Setup(x => x.SetToken("MyToken", "SomeField"));
+
+            var steps = new TokenSteps(scenarioContext.Object, pipelineService.Object, this.logger.Object, tokenManager.Object);
+
+            steps.SetTheFollowingTokens(new List<Token> { new Token { Name = "MyToken", Value = "SomeField" } });
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+            tokenManager.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that calling Transform creates the expected token.
+        /// </summary>
+        [TestMethod]
+        public void Transform()
+        {
+            var steps = new TokenSteps(null, null, null, null);
+
+            Table table = new Table("Name", "Value");
+            table.AddRow("MyToken", "SomeField");
+
+            IEnumerable<Token> transformed = steps.Transform(table);
+            Assert.AreEqual(1, transformed.Count());
+            Assert.AreEqual("MyToken", transformed.Single().Name);
+            Assert.AreEqual("SomeField", transformed.Single().Value);
         }
     }
 }

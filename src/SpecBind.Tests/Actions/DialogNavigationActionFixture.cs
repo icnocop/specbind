@@ -83,5 +83,40 @@ namespace SpecBind.Tests.Actions
             pageHistoryService.VerifyAll();
             scenarioContextHelper.VerifyAll();
         }
+
+        /// <summary>
+        /// Verifies that the action fails if the page history service could not find the page.
+        /// </summary>
+        [TestMethod]
+        public void Execute_WherePageHistoryServiceCouldNotFindPage_Fails()
+        {
+            // Arrange
+            Mock<ILogger> logger = new Mock<ILogger>();
+
+            Mock<IPage> page = new Mock<IPage>();
+            Mock<IScenarioContextHelper> scenarioContextHelper = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            Mock<IPageHistoryService> pageHistoryService = new Mock<IPageHistoryService>();
+            pageHistoryService.Setup(x => x.FindPage("mydialog")).Returns<IPage>(null);
+
+            var dialogNavigationAction = new DialogNavigationAction(logger.Object, scenarioContextHelper.Object, pageHistoryService.Object);
+
+            var context = new WaitForActionBase.WaitForActionBaseContext("mydialog", null);
+
+            var browser = new Mock<IBrowser>(MockBehavior.Strict);
+
+            WebDriverSupport.CurrentBrowser = browser.Object;
+
+            // Act
+            var result = dialogNavigationAction.Execute(context);
+
+            // Assert
+            Assert.AreEqual(false, result.Success);
+            Assert.AreEqual("A property with the name 'mydialog' was not found in any of the displayed pages:", result.Exception.Message);
+
+            browser.VerifyAll();
+            pageHistoryService.VerifyAll();
+            scenarioContextHelper.VerifyAll();
+        }
     }
 }

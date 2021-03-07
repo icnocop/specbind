@@ -14,6 +14,8 @@ namespace SpecBind.Tests
     using SpecBind.Helpers;
     using SpecBind.Pages;
     using SpecBind.BrowserSupport;
+    using TechTalk.SpecFlow;
+    using SpecBind.Tests.Extensions;
 
     /// <summary>
     /// A test fixture for the <see cref="WaitingSteps"/> step class.
@@ -764,6 +766,80 @@ namespace SpecBind.Tests
             steps.WaitForjQuery();
 
             browser.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that GivenIKeepRefreshingThePageForUpToSecondsUntilTheTitleContain performs WaitForPageTitleAction.
+        /// </summary>
+        [TestMethod]
+        public void GivenIKeepRefreshingThePageForUpToSecondsUntilTheTitleContain_PerfomsWaitForPageTitleAction()
+        {
+            var page = new Mock<IPage>();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(x => x.PerformAction<WaitForPageTitleAction>(
+                page.Object,
+                It.Is<WaitForPageTitleAction.WaitForPageTitleContext>(c => c.Title == "title" && c.Timeout.Value.TotalSeconds == 10)))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(x => x.GetCurrentPage()).Returns(page.Object);
+
+            var steps = new WaitingSteps(pipelineService.Object, scenarioContext.Object, this.logger.Object);
+
+            steps.GivenIKeepRefreshingThePageForUpToSecondsUntilTheTitleContain(10, "title");
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+            page.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies a call to wait to see element with a validation table succeeds.
+        /// </summary>
+        [TestMethod]
+        public void WaitToSeeElement_WithValidationTable_Succeeds()
+        {
+            var page = new Mock<IPage>();
+
+            var criteriaTable = new Table("Field", "Rule", "Value");
+            criteriaTable.AddRow("myproperty", "Equals", "mypropertyvalue");
+
+            var validationTable = criteriaTable.ToValidationTable();
+
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            pipelineService.Setup(x => x.PerformAction<WaitForElementsAction>(
+                page.Object,
+                It.Is<WaitForElementsAction.WaitForElementsContext>(c => c.Page == page.Object && c.ValidationTable.ContentEquals(validationTable))))
+                .Returns(ActionResult.Successful());
+
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+            scenarioContext.Setup(x => x.GetCurrentPage()).Returns(page.Object);
+
+            var steps = new WaitingSteps(pipelineService.Object, scenarioContext.Object, this.logger.Object);
+
+            steps.WaitToSeeElement(criteriaTable);
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
+            page.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verifies that a call to GivenIWaitedForSeconds succeeds.
+        /// </summary>
+        [TestMethod]
+        public void GivenIWaitedForSeconds_Succeeds()
+        {
+            var pipelineService = new Mock<IActionPipelineService>(MockBehavior.Strict);
+            var scenarioContext = new Mock<IScenarioContextHelper>(MockBehavior.Strict);
+
+            var steps = new WaitingSteps(pipelineService.Object, scenarioContext.Object, this.logger.Object);
+
+            steps.GivenIWaitedForSeconds(10);
+
+            scenarioContext.VerifyAll();
+            pipelineService.VerifyAll();
         }
     }
 }
