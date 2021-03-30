@@ -30,11 +30,11 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-        ///     Tests the fill field with a field on the page that doesn't exist.
+        ///     Tests the button right click action with a field on the page that doesn't exist.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ElementExecuteException))]
-        public void TestClickItemFieldDoesNotExist()
+        public void TestRightClickItemFieldDoesNotExist()
         {
             var locator = new Mock<IElementLocator>(MockBehavior.Strict);
             locator.Setup(p => p.GetElement("doesnotexist")).Throws(new ElementExecuteException("Cannot find item"));
@@ -51,10 +51,10 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-        ///     Tests the fill field with an element that exists and can be clicked.
+        ///     Tests the button right click action with an element that exists and can be clicked.
         /// </summary>
         [TestMethod]
-        public void TestClickItemSuccess()
+        public void TestRightClickItemSuccess()
         {
             var propData = new Mock<IPropertyData>(MockBehavior.Strict);
             propData.Setup(p => p.WaitForElementCondition(WaitConditions.NotMoving, null)).Returns(true);
@@ -79,10 +79,10 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-		///     Tests the fill field with an element that exists and can be clicked.
+		///     Tests the button right click action with an element that exists and can be clicked.
 		/// </summary>
 		[TestMethod]
-        public void TestClickItemWhenWaitIsEnabledReturnsSuccess()
+        public void TestRightClickItemWhenWaitIsEnabledReturnsSuccess()
         {
             var propData = new Mock<IPropertyData>(MockBehavior.Strict);
             propData.Setup(p => p.RightClickElement());

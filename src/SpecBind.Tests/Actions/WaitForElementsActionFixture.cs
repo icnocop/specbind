@@ -15,6 +15,7 @@ namespace SpecBind.Tests.Actions
     using SpecBind.Helpers;
     using SpecBind.Pages;
     using TechTalk.SpecFlow;
+    using static SpecBind.Tests.MoqHelpers.ElementLocatorDelegates;
 
     /// <summary>
     /// A test fixture for a wait for elements action
@@ -101,9 +102,6 @@ namespace SpecBind.Tests.Actions
             mockPropertyData.VerifyAll();
             page.VerifyAll();
         }
-
-        // Define a delegate with the params of the method that returns void.
-        private delegate void TryGetPropertyMethodDelegate(string propertyName, out IPropertyData output);
 
         /// <summary>
         /// Tests the element execute success.

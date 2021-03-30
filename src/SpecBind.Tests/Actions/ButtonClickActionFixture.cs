@@ -30,7 +30,7 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-        ///     Tests the fill field with a field on the page that doesn't exist.
+        ///     Tests the button click action with a field on the page that doesn't exist.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ElementExecuteException))]
@@ -51,7 +51,7 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-        ///     Tests the fill field with an element that exists and can be clicked.
+        ///     Tests the button click action with an element that exists and can be clicked.
         /// </summary>
         [TestMethod]
         public void TestClickItemSuccess()
@@ -79,7 +79,7 @@ namespace SpecBind.Tests.Actions
         }
 
         /// <summary>
-		///     Tests the fill field with an element that exists and can be clicked.
+		///     Tests the button click action with an element that exists and can be clicked.
 		/// </summary>
 		[TestMethod]
         public void TestClickItemWhenWaitIsEnabledReturnsSuccess()
